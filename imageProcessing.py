@@ -50,6 +50,25 @@ class ImageProcessing:
         self.__update(res)
         return res;
 
+    def display_histogram(self):
+        img = self.img  # get image reference
+        colors_frequency = {}  # initialize dictionary to count frequency of each color
+
+        for x in range(len(img)):
+            for y in range(len(img[0])):
+                if not colors_frequency.get(img[x][y]):
+                    colors_frequency[img[x][y]] = 0
+                    continue
+                colors_frequency[img[x][y]] = colors_frequency.get(img[x][y]) + 1  # count color frequency
+
+        x_axis = list(colors_frequency)  # get list of colors for X axis
+        y_axis = list(colors_frequency)  # get list of frequencies for Y axis
+
+        # Plot the histogram
+        plt.figure()
+        plt.bar(range(len(colors_frequency)), y_axis, tick_label=x_axis)
+        plt.show()
+
     def __update(self, currentImg):
         self.img = currentImg
         self.imgX, self.imgY = currentImg.shape
@@ -58,6 +77,7 @@ class ImageProcessing:
 
 
 imgObj = ImageProcessing('./images/grayImage.png')
+imgObj.display_histogram()
 res = imgObj.logTransform()
 plt.figure()
 plt.subplot(1, 1, 1)

@@ -9,13 +9,13 @@ from imageProcessing import ImageProcessing
 
 img = imread('./images/grayImage.png')
 imgGrayed = ImageProcessing.rgb2Gray(img)
-rows , cols = imgGrayed.shape
+rows, cols = imgGrayed.shape
 
 arr2D = np.array(imgGrayed)
 grayLevelValueThreshold = (2 ** math.ceil(math.log(np.amax(arr2D) , 2))) - 1 
 
 map1 = {}
-rows , cols = arr2D.shape
+rows, cols = arr2D.shape
 
 mappingMedium = grayLevelValueThreshold / (rows * cols);
 for scale in range(0,grayLevelValueThreshold + 1):
