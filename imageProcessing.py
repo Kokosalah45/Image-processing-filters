@@ -98,7 +98,6 @@ class ImageProcessing :
 
     def resetChanges(self):
         self.__update(self.rgb2Gray(imread(self.imgPath)))
-    
 
 
     
