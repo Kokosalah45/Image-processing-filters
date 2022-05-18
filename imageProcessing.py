@@ -1,4 +1,3 @@
-# %%
 import numpy as np
 from skimage.io import imread 
 from matplotlib import pyplot as plt 
@@ -68,7 +67,7 @@ class ImageProcessing :
         self.__update(res)
         return self;
     def powerLawTransform(self, gamma , c = 0):
-        res = self.pointProcessing.inverseLogTransformation(gamma, c)
+        res = self.pointProcessing.powerLawTransformation(gamma,c)
         self.__update(res)
         return self;
 
@@ -112,13 +111,13 @@ class ImageProcessing :
 
 imgObj = ImageProcessing('./images/grayImage.png')
 
-
+res=imgObj.powerLawTransform(0.5,2)
 
 
 
 plt.figure()
 plt.subplot(111)
-plt.imshow(imgObj.averageFilter(1).get(), cmap='gray')
+plt.imshow(res.get(), cmap='gray')
 
 
 

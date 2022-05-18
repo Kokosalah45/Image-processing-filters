@@ -310,11 +310,6 @@ class Filters :
         return outImage.real
 
 
-filterObj = Filters(plt.imread('./images/grayImage.png') , 10 ,10)
-res = filterObj.BLPF()
-plt.figure()
-plt.subplot(111)
-plt.imshow(res , cmap='gray')
 
 
 
