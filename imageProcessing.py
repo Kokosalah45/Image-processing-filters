@@ -7,6 +7,9 @@ from Filters import Filters
 class ImageProcessing :
     def __init__(self,imgPath):
         self.img = self.rgb2Gray(imread(imgPath));
+        self.imgPath = imgPath
+        self.imgState = np.array([])
+        
         x , y = self.img.shape
         self.imgX = x
         self.imgY = y
@@ -38,39 +41,89 @@ class ImageProcessing :
     def adjustIntensityLevel(self , k = 1):
         res = self.pointProcessing.grayIntensity(k)
         self.__update(res)
-        return res;
-    def logTransform(self , c = 0):
-        res = self.pointProcessing.logTransformation(c)
+        return self;
+    
+    def subSample(self , factor):
+        res = self.pointProcessing.Sample(factor)
         self.__update(res)
-        return res;
+        return self;
+    def contrastStretching(self , smin = 0 , smax = 255):
+        res = self.pointProcessing.contrastStretching(smin , smax)
+        self.__update(res)
+        return self;
+    def threshold(self , threshhold):
+        res = self.pointProcessing.thresholding(threshhold)
+        self.__update(res)
+        return self;
+    def grayLevelSlicing(self , min , max ,newVal = 255 , keep = False):
+        res = self.pointProcessing.grayLevelSlice(min , max , newVal, keep)
+        self.__update(res)
+        return self;
+    def logTransform(self , c = 0):
+            res = self.pointProcessing.logTransformation(c)
+            self.__update(res)
+            return self;
     def inverseLogTransform(self , c = 0):
         res = self.pointProcessing.inverseLogTransformation(c)
         self.__update(res)
-        return res;
+        return self;
+    def powerLawTransform(self, gamma , c = 0):
+        res = self.pointProcessing.inverseLogTransformation(gamma, c)
+        self.__update(res)
+        return self;
 
+        
+    def minmaxFilter(self,mode):
+        res = self.filters.minmaxFilter(mode)
+        self.__update(res)
+        return self
+    def medianFilter(self):
+        res = self.filters.medianFilter()
+        self.__update(res)
+        return self
+    def averageFilter(self,sigma=None):
+        res = self.filters.averageFilter(sigma)
+        self.__update(res)
+        return self
+
+    def lablacianFilter(self , neighbors  , sign , composite = False):
+        res = self.filters.laplacianFilter(neighbors , sign , composite)
+        self.__update(res)
+        return self
+    def get(self):
+        return self.img
     def __update(self,currentImg):
         self.img = currentImg
-        self.imgX , self.imgY = currentImg.shape
         self.pointProcessing = PointProcessing(self.img)
         self.filters = Filters(self.img)
+
+    def updateImgState(self):
+        if(self.imageState == []):
+            self.imgState.append(self.rgb2Gray(imread(self.imgPath)))
+        
+    def changeImgPath(self , imgPath):
+        self.imgState = []
+        self.imgPath = imgPath
+        self.updateImgState()
+    
 
 
 
 
 imgObj = ImageProcessing('./images/grayImage.png')
-res = imgObj.logTransform()
+
+
+
+
+
 plt.figure()
-plt.subplot(1,1,1)
-plt.imshow(res , cmap='gray')
-res = imgObj.inverseLogTransform()
-
-plt.figure()
-plt.subplot(1,1,1)
-plt.imshow(res , cmap='gray')
+plt.subplot(111)
+plt.imshow(imgObj.averageFilter(1).get(), cmap='gray')
 
 
 
- 
+
+
 
 
 

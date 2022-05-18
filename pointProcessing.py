@@ -1,6 +1,6 @@
 # %%
 from re import S
-from tkinter import Image
+
 from imageio import read
 import numpy as np
 from matplotlib import pyplot as plt 
@@ -87,19 +87,45 @@ class PointProcessing :
              resImg[row][col] =  s
         
         return resImg   
-   
 
+      def grayLevelSlice (self , min , max , newVal = 255 , keep = False ):
+        rows , cols , img = self.getImageDetails()
+        resImg = np.zeros((rows , cols))
+        for row in range (0 , rows):
+          for col in range (0 , cols):
+            r = img[row][col]
+            if( min >= r and r <= max ):
+              resImg[row][col] =  newVal            
+            else:
+              resImg[row][col] = img[row][col] if (keep == True) else 0
+              
+        return resImg 
 
-     
       def thresholding(self , threshhold):
         rows,cols,img = self.getImageDetails()
         resImg = np.zeros((rows , cols))
         for row in range (0 , rows):
           for col in range (0 , cols): 
-             resImg[row,col] = 0 if (img[row,col] < threshhold) else 255
+              resImg[row,col] = 0 if (img[row,col] < threshhold) else 255
 
         return resImg
 
+   
+      def bitPlaneSlicing (self):
+        rows , cols , img = self.getImageDetails()
+        resImages = []
+        for i in range (0,8):
+          temp = np.zeros((rows,cols))
+          temp = (img >> i) & 1
+          resImages.append(temp);
+
+        plt.figure()
+        for i in range (1,9):
+          plt.subplot(2,4,i)
+          plt.imshow(resImages[i-1] , cmap='gray')
+        return img 
+ 
+  
 
 
 
@@ -110,29 +136,11 @@ class PointProcessing :
 
 #################################################
 
-imgObj = PointProcessing(imread('./images/grayImage.png'))
-res = imgObj.powerLawTransformation(1)
-plt.figure()
-plt.subplot(1,1,1)
-plt.imshow(res , cmap="gray")
-res = imgObj.powerLawTransformation(0.5)
-
-plt.figure()
-plt.subplot(1,1,1)
-plt.imshow(res , cmap="gray")
-
-res = imgObj.powerLawTransformation(0.2)
-
-plt.figure()
-plt.subplot(1,1,1)
-plt.imshow(res , cmap="gray")
 
 
-res = imgObj.powerLawTransformation(2)
 
-plt.figure()
-plt.subplot(1,1,1)
-plt.imshow(res , cmap="gray")
+
+
 
 
 
