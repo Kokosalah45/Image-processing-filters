@@ -8,12 +8,11 @@ class ImageProcessing :
         self.img = self.rgb2Gray(imread(imgPath));
         self.imgPath = imgPath
         self.imgState = np.array([])
-        
         x , y = self.img.shape
         self.imgX = x
         self.imgY = y
         self.pointProcessing = PointProcessing(self.img)
-        self.filters = Filters(self.img)
+        self.filters = Filters(self.img)                                                                                                                                                                            
 
     def getImageDetails(self):
         return [self.imgX , self.imgY , self.img]     
@@ -71,7 +70,7 @@ class ImageProcessing :
         self.__update(res)
         return self;
 
-        
+
     def minmaxFilter(self,mode):
         res = self.filters.minmaxFilter(mode)
         self.__update(res)
@@ -96,14 +95,11 @@ class ImageProcessing :
         self.pointProcessing = PointProcessing(self.img)
         self.filters = Filters(self.img)
 
-    def updateImgState(self):
-        if(self.imageState == []):
-            self.imgState.append(self.rgb2Gray(imread(self.imgPath)))
-        
-    def changeImgPath(self , imgPath):
-        self.imgState = []
-        self.imgPath = imgPath
-        self.updateImgState()
+    def resetChanges(self):
+        self.__update(self.rgb2Gray(imread(self.imgPath)))
+    
+
+
     
 
 

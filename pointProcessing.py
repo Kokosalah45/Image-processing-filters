@@ -57,6 +57,14 @@ class PointProcessing :
 
         return resImg
 
+      def thresholding(self , threshhold):
+        rows,cols,img = self.getImageDetails()
+        resImg = np.zeros((rows , cols))
+        for row in range (0 , rows):
+          for col in range (0 , cols): 
+              resImg[row,col] = 0 if (img[row,col] < threshhold) else 255
+
+        return resImg
       def logTransformation (self , c = 0):
         rows , cols , img = self.getImageDetails()
         c =  255 // np.log( 1 + np.amax(img) ) if(c==0) else c
@@ -100,15 +108,7 @@ class PointProcessing :
               resImg[row][col] = img[row][col] if (keep == True) else 0
               
         return resImg 
-
-      def thresholding(self , threshhold):
-        rows,cols,img = self.getImageDetails()
-        resImg = np.zeros((rows , cols))
-        for row in range (0 , rows):
-          for col in range (0 , cols): 
-              resImg[row,col] = 0 if (img[row,col] < threshhold) else 255
-
-        return resImg
+        
 
    
       def bitPlaneSlicing (self):
