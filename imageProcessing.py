@@ -76,6 +76,26 @@ class ImageProcessing:
         res = self.pointProcessing.powerLawTransformation(gamma, c)
         self.__update(res)
         return self;
+    def bitPlaneSlicing(self, picIndex, ):
+        res = self.pointProcessing.bitPlaneSlicing(picIndex)
+        self.__update(res)
+        return self;
+    def Add(self, pixelVal ):
+        res = self.pointProcessing.Add(pixelVal)
+        self.__update(res)
+        return self;
+    def Diff(self, pixelVal ):
+        res = self.pointProcessing.Diff(pixelVal)
+        self.__update(res)
+        return self;
+    def And(self, otherImage):
+        res = self.pointProcessing.And(otherImage)
+        self.__update(res)
+        return self;
+    def Or(self,otherImage ):
+        res = self.pointProcessing.Or(otherImage)
+        self.__update(res)
+        return self;
 
     def minmaxFilter(self, mode):
         res = self.filters.minmaxFilter(mode)
@@ -142,7 +162,7 @@ class ImageProcessing:
 
 imgObj = ImageProcessing('./images/grayImage.png')
 
-
+ 
 res=imgObj.IHPF()
 plt.figure()
 plt.subplot(111)

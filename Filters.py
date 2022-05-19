@@ -229,7 +229,7 @@ class Filters :
 
         D = np.sqrt(U**2 + V**2)
 
-        H = 1/(1+(D0/D)**n)
+        H = 1/ ((1+(D0/D)**n) +  1)
 
         outImage = np.fft.ifft2(FT_img * H)
         return outImage.real
@@ -256,7 +256,7 @@ class Filters :
 
         D = np.sqrt(U**2 + V**2)
 
-        H = 1/(1+(D0/D)**n)
+        H = 1/ ((1+(D0/D)**n) +  1)
 
         outImage = np.fft.ifft2(FT_img * H)
         return outImage.real

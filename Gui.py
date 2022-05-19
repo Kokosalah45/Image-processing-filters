@@ -23,10 +23,12 @@ class Gui(Tk):
         self.pointProcessing = Button(self.leftHalf, text="Point Processing", width=30,
                                       command=self.createPointProcessing,
                                       borderwidth=0, bg='#e7e7e7', pady=5)
+     
         self.neighborhoodProcessing = Button(self.leftHalf, text="Neighborhood Processing",
                                              command=self.createNeighborhoodProcessing, borderwidth=0, width=30,
                                              bg='#e7e7e7', pady=5)
         self.pointProcessing.grid(row=2, column=0, padx=(0, 0))
+       
         self.neighborhoodProcessing.grid(row=3, column=0)
         self.processingSelector = ttk.Combobox(self.leftHalf, width=30, state="readonly")
         self.createPointProcessing()
@@ -53,11 +55,16 @@ class Gui(Tk):
                   "subSampling",
                   "contrastStretching",
                   "thresholding",
+                  "and",
+                  "or",
+                  'add',
+                  'diff',
                   "logTransformation",
                   "inverseLogTransformation",
                   "powerLawTransformation",
                   "grayLevelSlice",
-                  "bitPlaneSlicing")
+                  "bitPlaneSlicing"
+               )
         self.processingSelector['values'] = values
 
     def resetImage(self):
@@ -79,7 +86,6 @@ class Gui(Tk):
         # self.image=self.imageProcessing.get()
         plt.imshow(self.image, cmap='gray')
         self.display = FigureCanvasTkAgg(fig, master=self)
-        print(self.display)
         self.display.draw()
         self.display.get_tk_widget().grid(row=0, column=1, padx=90)
 
@@ -104,6 +110,9 @@ class Gui(Tk):
             "subSampling": self.subSample,
             "contrastStretching": self.contrastStretching,
             "thresholding": self.threshold,
+            "bitPlaneSlicing": self.bitPlaneSlicing,
+            "add": self.Add,
+            "diff": self.Diff,
             "logTransformation": self.logTransform,
             "inverseLogTransformation": self.inverseLogTransform,
             "powerLawTransformation": self.powerLawTransform,
@@ -176,6 +185,16 @@ class Gui(Tk):
         sign_param = simpledialog.askinteger(title="Field Input", prompt="Input Sign")
         composite_param = simpledialog.askinteger(title="Field Input", prompt="Input Composite")
         return self.imageProcessing.lablacianFilter(neighbors_param, sign_param, composite_param)
+    def bitPlaneSlicing(self):
+        picIndex = simpledialog.askinteger(title="Field Input", prompt="Input picIndex")
+        return self.imageProcessing.bitPlaneSlicing(picIndex)
+    def Add(self):
+        pixelVal = simpledialog.askinteger(title="Field Input", prompt="Input Add")
+        return self.imageProcessing.Add(pixelVal)
+    def Diff(self):
+        pixelVal = simpledialog.askinteger(title="Field Input", prompt="Input Diff")
+        return self.imageProcessing.Diff(pixelVal)
+ 
 
 
 root = Gui()

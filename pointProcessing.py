@@ -1,11 +1,11 @@
 # %%
 from re import S
+from tkinter import Image
 
 from imageio import read
 import numpy as np
 from matplotlib import pyplot as plt
 from skimage.io import imread
-
 
 # x = np.shape([[1,2],[3,4] ])
 
@@ -111,7 +111,7 @@ class PointProcessing:
 
         return resImg
 
-    def bitPlaneSlicing(self):
+    def bitPlaneSlicing(self , picIndex):
         rows, cols, img = self.getImageDetails()
         resImages = []
         for i in range(0, 8):
@@ -119,12 +119,35 @@ class PointProcessing:
             temp = (img >> i) & 1
             resImages.append(temp);
 
-        plt.figure()
-        for i in range(1, 9):
-            plt.subplot(2, 4, i)
-            plt.imshow(resImages[i - 1], cmap='gray')
-        return img
+       
+        return resImages[picIndex]
 
-    #################################################
+
+    def Add(self , pixelVal):
+        rows, cols, img = self.getImageDetails()
+        resImg = np.copy(img)
+ 
+        for row in range(0, rows):
+            for col in range(0, cols):
+               resImg[row][col] = resImg[row][col] + pixelVal
+     
+        return resImg
+      
+    def Diff(self , pixelVal):
+     
+        rows, cols, img = self.getImageDetails()
+        resImg = np.copy(img)
+        for row in range(0, rows):
+            for col in range(0, cols):
+                resImg[row][col] = img[row][col] - pixelVal
+           
+        return resImg
+    def And(self , otherImage):
+        rows, cols, img = self.getImageDetails()
+        return np.logical_and(img ,otherImage)
+    def Or(self , otherImage):
+        rows, cols, img = self.getImageDetails()
+        return np.logical_or(img ,otherImage)
+
 
 # %%
