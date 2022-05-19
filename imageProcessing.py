@@ -1,4 +1,3 @@
-# %%
 import numpy as np
 from skimage.io import imread
 from matplotlib import pyplot as plt
@@ -9,6 +8,8 @@ from Filters import Filters
 class ImageProcessing:
     def __init__(self, imgPath):
         self.img = self.rgb2Gray(imread(imgPath));
+        self.imgPath = imgPath
+        self.imgState = np.array([])
         x, y = self.img.shape
         self.imgX = x
         self.imgY = y
@@ -21,7 +22,7 @@ class ImageProcessing:
     @staticmethod
     def rgb2Gray(img):
 
-        if (len(img.shape) == 2):
+        if len(img.shape) == 2:
             return img
         rows, cols, d = img.shape
 
@@ -38,54 +39,110 @@ class ImageProcessing:
     def adjustIntensityLevel(self, k=1):
         res = self.pointProcessing.grayIntensity(k)
         self.__update(res)
-        return res;
+        return self;
+
+    def subSample(self, factor):
+        res = self.pointProcessing.Sample(factor)
+        self.__update(res)
+        return self;
+
+    def contrastStretching(self, smin=0, smax=255):
+        res = self.pointProcessing.contrastStretching(smin, smax)
+        self.__update(res)
+        return self;
+
+    def threshold(self, threshhold):
+        res = self.pointProcessing.thresholding(threshhold)
+        self.__update(res)
+        return self;
+
+    def grayLevelSlicing(self, min, max, newVal=255, keep=False):
+        res = self.pointProcessing.grayLevelSlice(min, max, newVal, keep)
+        self.__update(res)
+        return self;
 
     def logTransform(self, c=0):
         res = self.pointProcessing.logTransformation(c)
         self.__update(res)
-        return res;
+        return self;
 
     def inverseLogTransform(self, c=0):
         res = self.pointProcessing.inverseLogTransformation(c)
         self.__update(res)
-        return res;
+        return self;
 
-    def display_histogram(self):
-        img = self.img  # get image reference
-        colors_frequency = {}  # initialize dictionary to count frequency of each color
+    def powerLawTransform(self, gamma, c=0):
+        res = self.pointProcessing.powerLawTransformation(gamma, c)
+        self.__update(res)
+        return self;
 
-        for x in range(len(img)):
-            for y in range(len(img[0])):
-                if not colors_frequency.get(img[x][y]):
-                    colors_frequency[img[x][y]] = 0
-                    continue
-                colors_frequency[img[x][y]] = colors_frequency.get(img[x][y]) + 1  # count color frequency
+    def minmaxFilter(self, mode):
+        res = self.filters.minmaxFilter(mode)
+        self.__update(res)
+        return self
 
-        x_axis = list(colors_frequency)  # get list of colors for X axis
-        y_axis = list(colors_frequency)  # get list of frequencies for Y axis
+    def medianFilter(self):
+        res = self.filters.medianFilter()
+        self.__update(res)
+        return self
 
-        # Plot the histogram
-        plt.figure()
-        plt.bar(range(len(colors_frequency)), y_axis, tick_label=x_axis)
-        plt.show()
+    def averageFilter(self, sigma=None):
+        res = self.filters.averageFilter(sigma)
+        self.__update(res)
+        return self
+
+    def lablacianFilter(self, neighbors, sign, composite=False):
+        res = self.filters.laplacianFilter(neighbors, sign, composite)
+        self.__update(res)
+        return self
+
+    def ILPF(self):
+        res = self.filters.ILPF()
+        self.__update(res)
+        return self
+
+    def IHPF(self):
+        res = self.filters.IHPF()
+        self.__update(res)
+        return self
+
+    def BLPF(self):
+        res = self.filters.BLPF()
+        self.__update(res)
+        return self
+
+    def BHPF(self):
+        res = self.filters.BHPF()
+        self.__update(res)
+        return self
+
+    def GLPF(self):
+        res = self.filters.GLPF()
+        self.__update(res)
+        return self
+
+    def GHPF(self):
+        res = self.filters.GHPF()
+        self.__update(res)
+        return self
+
+    def get(self):
+        return self.img
 
     def __update(self, currentImg):
         self.img = currentImg
-        self.imgX, self.imgY = currentImg.shape
         self.pointProcessing = PointProcessing(self.img)
         self.filters = Filters(self.img)
 
+    def resetChanges(self):
+        self.__update(self.rgb2Gray(imread(self.imgPath)))
+        return self
+
 
 imgObj = ImageProcessing('./images/grayImage.png')
-imgObj.display_histogram()
-res = imgObj.logTransform()
-plt.figure()
-plt.subplot(1, 1, 1)
-plt.imshow(res, cmap='gray')
-res = imgObj.inverseLogTransform()
 
-plt.figure()
-plt.subplot(1, 1, 1)
-plt.imshow(res, cmap='gray')
+res = imgObj.powerLawTransform(0.5, 2)
 
-# %%
+# plt.figure()
+# plt.subplot(111)
+# plt.imshow(res.get(), cmap='gray')
