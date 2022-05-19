@@ -3,6 +3,8 @@ from tkinter import ttk
 from tkinter.filedialog import askopenfile 
 from imageProcessing import *
 from PIL import Image,ImageTk
+from matplotlib.backends.backend_tkagg import (
+    FigureCanvasTkAgg)
 class Gui(Tk):
     def __init__(self):
         super().__init__()
@@ -25,8 +27,8 @@ class Gui(Tk):
         self.imageProcessing=None
         self.imagePath=None
         self.image = None
-        self.display =Canvas(self.rightHalf, width= 600, height= 400)
-        self.display.grid(row=0,column=0)
+        self.process = Button(self.leftHalf, text='Process', command= self.performProcessing)
+        self.process.grid(row=5,column=1)
     def createPointProcessing(self):
         values = ("grayIntensityScaling" ,
 "subSampling"  ,
@@ -44,10 +46,15 @@ class Gui(Tk):
             return
         self.imagePath=file.name
         self.imageProcessing = ImageProcessing(self.imagePath)
-        self.image= PhotoImage(file=file.name)
         self.updateDisplay()
     def updateDisplay(self):
-        self.display.create_image(0,0,anchor=NW,image=self.image)
+        fig = plt.figure(figsize=(5,4))
+        self.image=self.imageProcessing.get()
+        plt.imshow(self.image)
+        self.display = FigureCanvasTkAgg(fig, master=self)
+        print(self.display)
+        self.display.draw ()
+        self.display.get_tk_widget().grid(row=0,column=1)
     def createNeighborhoodProcessing(self):
         values = ("median filter",
  "minmax filter"  ,
@@ -63,12 +70,32 @@ class Gui(Tk):
 
                   )
         self.processingSelector['values'] =  values
-    def onProcessingSelection(self):
-        process= self.processingSelector.get()
-        operations = {
-            
-            
-            }
+    def selectedProcess(self,processName):
+       
+        processMap = {
+        "grayIntensityScaling" : self.imageProcessing.adjustIntensityLevel  ,
+        "subSampling" : self.imageProcessing.subSample  ,
+        "contrastStretching" : self.imageProcessing.contrastStretching ,
+        "thresholding" : self.imageProcessing.threshold  ,
+        "logTransformation" : self.imageProcessing.logTransform  ,
+        "inverseLogTransformation" : self.imageProcessing.inverseLogTransform,
+        "powerLawTransformation" : self.imageProcessing.powerLawTransform ,
+        "grayLevelSlice" : self.imageProcessing.grayLevelSlicing ,
+        "median filter" : self.imageProcessing.medianFilter ,
+        "minmax filter" : self.imageProcessing.minmaxFilter,
+        "average filter" : self.imageProcessing.averageFilter,
+        "laplacian filter": self.imageProcessing.lablacianFilter,
+        "Ideal Highpass Filter" : self.imageProcessing.IHPF,
+        "Ideal Lowpass Filter" : self.imageProcessing.ILPF,
+        "Butterworth Highpass Filter (BHPF)" : self.imageProcessing.BHPF,
+        "Butterworth Lowpass Filter (BHPF)" : self.imageProcessing.BLPF,
+        "Gaussian Highpass Filter (GHPF)" : self.imageProcessing.GHPF,
+        "Gaussian Lowpass Filter (GHPF)" : self.imageProcessing.GLPF
+        }
+        return processMap[processName]
+    def performProcessing(self):
+        operation = self.selectedProcess(self.processingSelector.get())
+        self.updateDisplay(operation())
         
 
 
