@@ -88,6 +88,31 @@ class ImageProcessing :
         res = self.filters.laplacianFilter(neighbors , sign , composite)
         self.__update(res)
         return self
+
+    def ILPF(self):
+        res = self.filters.ILPF()
+        self.__update(res)
+        return self
+    def IHPF(self):
+        res = self.filters.IHPF()
+        self.__update(res)
+        return self
+    def BLPF(self):
+        res = self.filters.BLPF
+        self.__update(res)
+        return self
+    def BHPF(self):
+        res = self.filters.BHPF()
+        self.__update(res)
+        return self
+    def GLPF(self):
+        res = self.filters.GLPF()
+        self.__update(res)
+        return self
+    def GHPF(self):
+        res = self.filters.GHPF()
+        self.__update(res)
+        return self
     def get(self):
         return self.img
     def __update(self,currentImg):
@@ -100,7 +125,6 @@ class ImageProcessing :
     
 
 
-    
 
 
 

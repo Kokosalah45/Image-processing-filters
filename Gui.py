@@ -44,7 +44,7 @@ class Gui(Tk):
             return
         self.imagePath=file.name
         self.imageProcessing = ImageProcessing(self.imagePath)
-        self.image= PhotoImage(file=file.name)
+        self.image= self.imageProcessing.get()
         self.updateDisplay()
     def updateDisplay(self):
         self.display.create_image(0,0,anchor=NW,image=self.image)
