@@ -1,3 +1,4 @@
+# %%
 import numpy as np
 from skimage.io import imread
 from matplotlib import pyplot as plt
@@ -142,6 +143,7 @@ class ImageProcessing:
 imgObj = ImageProcessing('./images/grayImage.png')
 
 res = imgObj.powerLawTransform(0.5, 2)
+
 
 # plt.figure()
 # plt.subplot(111)
