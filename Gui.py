@@ -28,6 +28,10 @@ class Gui(Tk):
         self.imagePath=None
         self.image = None
         self.process = Button(self.leftHalf, text='Process', command= self.performProcessing)
+     #   self.parameterLabel = Label(self.leftHalf,text="Please enter desired values ")
+      #  self.parameterLabel.grid(row=6,column=1)
+       # self.input= Entry(self.leftHalf)
+      #  self.input.grid(row=7,column=0,pady=(20,0),padx=(100,0))
         self.process.grid(row=5,column=1)
     def createPointProcessing(self):
         values = ("grayIntensityScaling" ,
@@ -46,15 +50,17 @@ class Gui(Tk):
             return
         self.imagePath=file.name
         self.imageProcessing = ImageProcessing(self.imagePath)
+
+        self.image= self.imageProcessing.get()
         self.updateDisplay()
     def updateDisplay(self):
         fig = plt.figure(figsize=(5,4))
-        self.image=self.imageProcessing.get()
+        #self.image=self.imageProcessing.get()
         plt.imshow(self.image)
         self.display = FigureCanvasTkAgg(fig, master=self)
         print(self.display)
         self.display.draw ()
-        self.display.get_tk_widget().grid(row=0,column=1)
+        self.display.get_tk_widget().grid(row=0,column=1,padx=90)
     def createNeighborhoodProcessing(self):
         values = ("median filter",
  "minmax filter"  ,
@@ -88,14 +94,15 @@ class Gui(Tk):
         "Ideal Highpass Filter" : self.imageProcessing.IHPF,
         "Ideal Lowpass Filter" : self.imageProcessing.ILPF,
         "Butterworth Highpass Filter (BHPF)" : self.imageProcessing.BHPF,
-        "Butterworth Lowpass Filter (BHPF)" : self.imageProcessing.BLPF,
+        "Butterworth Lowpass Filter (BLPF)" : self.imageProcessing.BLPF,
         "Gaussian Highpass Filter (GHPF)" : self.imageProcessing.GHPF,
         "Gaussian Lowpass Filter (GHPF)" : self.imageProcessing.GLPF
         }
         return processMap[processName]
     def performProcessing(self):
         operation = self.selectedProcess(self.processingSelector.get())
-        self.updateDisplay(operation())
+        self.image = operation().get()
+        self.updateDisplay()
         
 
 
