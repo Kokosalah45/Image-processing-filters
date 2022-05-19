@@ -1,3 +1,4 @@
+# %%
 import numpy as np
 from skimage.io import imread 
 from matplotlib import pyplot as plt 
@@ -98,7 +99,7 @@ class ImageProcessing :
         self.__update(res)
         return self
     def BLPF(self):
-        res = self.filters.BLPF
+        res = self.filters.BLPF()
         self.__update(res)
         return self
     def BHPF(self):
@@ -131,10 +132,32 @@ class ImageProcessing :
 
 imgObj = ImageProcessing('./images/grayImage.png')
 
-res=imgObj.powerLawTransform(0.5,2)
+res=imgObj.IHPF()
+plt.figure()
+plt.subplot(111)
+plt.imshow(res.get(), cmap='gray')
 
+res=imgObj.ILPF()
+plt.figure()
+plt.subplot(111)
+plt.imshow(res.get(), cmap='gray')
 
+res=imgObj.BHPF()
+plt.figure()
+plt.subplot(111)
+plt.imshow(res.get(), cmap='gray')
 
+res=imgObj.BLPF()
+plt.figure()
+plt.subplot(111)
+plt.imshow(res.get(), cmap='gray')
+
+res=imgObj.GHPF()
+plt.figure()
+plt.subplot(111)
+plt.imshow(res.get(), cmap='gray')
+
+res=imgObj.GLPF()
 plt.figure()
 plt.subplot(111)
 plt.imshow(res.get(), cmap='gray')
